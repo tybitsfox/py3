@@ -22,7 +22,7 @@ dstr=['ty001','env2016','env2017','env2018','gis_hb','web_data','gis_hb2018','gi
 emstr='/home/tian/.thunderbird/'
 #游戏配置及部分模拟器的备份：epsxe,pcsx2,retroarch,mednafen,citra,yuzu,ryujinx,wine,dosbox
 gappstr=['Ryujinx/','citra-linux-20221119-bccef5e/','ppsspp/','epsxe32/','retroarch/','yuzu/','duckstation/','citra-linux-20220702-546a8da/','epsxe/']
-ginistr=['.config/citra-emu/','.config/ppsspp/','.config/PCSX2/','.config/retroarch/','.config/Ryujinx/','.config/yuzu/','.epsxe/','.local/share/duckstation/','.local/share/ePSXe/','.wine/','.zsnes/']
+ginistr=['.config/citra-emu/','.config/ppsspp/','.config/PCSX2/','.config/retroarch/','.config/Ryujinx/','.config/yuzu/','.epsxe/','.local/share/duckstation/','.local/share/ePSXe/','.local/share/citra-emu/','.local/share/yuzu/','.wine/','.zsnes/']
 #生成的压缩备份文件
 dststr=['sysini.tar.bz2','webpic.tar.bz2','mysqlbak.tar.bz2','email.tar.bz2','game.tar.bz2','gameini.tar.bz2','']
 #}}}

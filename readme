@@ -1,0 +1,25 @@
+需要改进的地方：
+1、游戏的配置文件太大了，很多是些不必要的临时文件，决定在备份检查时添加删除功能，将这些文件删除后在备份
+2、保存/usr/lib/systemd/system/iniget.service，这是我写的一个服务程序，用于确定记录保存cpu温度的文件所在的目录，因为新的linux内核将一些信息并不是保存在固定的目录或文件下，通过该程序可以确定我所需的目录的位置，为conky提供信息
+
+<1>.config/Ryujinx 
+.config/Ryujinx/games/
+.config/Ryujinx/sdcard/Nintendo/Contents/registered/  <--test can deleted
+<2>.config/retroarch
+.config/retroarch/cheats/
+.config/retroarch/downloads/
+.config/retroarch/logs/
+.config/retroarch/database/
+.config/retroarch/shaders/
+<3>.config/PCSX2
+.config/PCSX2/sstates/
+<4>.config/ppsspp
+.config/ppsspp/PSP/PPSSPP_STATE/
+
+
+
+
+
+
+
+
