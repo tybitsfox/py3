@@ -23,6 +23,8 @@ emstr='/home/tian/.thunderbird/'
 #游戏配置及部分模拟器的备份：epsxe,pcsx2,retroarch,mednafen,citra,yuzu,ryujinx,wine,dosbox
 gappstr=['Ryujinx/','citra-linux-20221119-bccef5e/','ppsspp/','epsxe32/','retroarch/','yuzu/','duckstation/','citra-linux-20220702-546a8da/','epsxe/']
 ginistr=['.config/citra-emu/','.config/ppsspp/','.config/PCSX2/','.config/retroarch/','.config/Ryujinx/','.config/yuzu/','.epsxe/','.local/share/duckstation/','.local/share/ePSXe/','.local/share/citra-emu/','.local/share/yuzu/','.wine/','.zsnes/']
+#游戏配置的精简函数，下列目录将被精简
+gdelstr=['.config/Ryujinx/games/','.config/retroarch/cheats/','.config/retroarch/downloads/','.config/retroarch/logs/','.config/retroarch/database/','.config/retroarch/shaders/','.config/PCSX2/sstates/','.config/ppsspp/PSP/PPSSPP_STATE/','.local/share/citra-emu/states/']
 #生成的压缩备份文件
 dststr=['sysini.tar.bz2','webpic.tar.bz2','mysqlbak.tar.bz2','email.tar.bz2','game.tar.bz2','gameini.tar.bz2','']
 #}}}
@@ -112,7 +114,31 @@ def check_exist(x):
 	else:
 		return 0
 #}}}
-
+#{{{reduce_normal 普通精简
+def	reduce_normal():
+	print('开始对游戏配置进行精简...')
+	for i in gdelstr:
+		j='home/tian/'+i
+		if os.access(j,0):
+#			subprocess.run('rm -rf '+j,shell=True,stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL)
+			print(i.ljust(80)+'已清空')
+#}}}
+#{{{sub_main()	二级选择，模拟器配置备份：完全备份，精简备份，极简备份
+def sub_main():
+	print('模拟器配置检测完成！备份有三种方式：1、完全备份\t2、精简备份\t3、极简备份')
+	print('\033[31;5m 注意：精简备份会删除现有配置中的某些文件，完全备份和极简备份不会删除任何文件\033[0m')
+	i=input('\n请选择：')
+	if i == '1':
+		print('完全备份...')
+		exit(0)
+	elif i == '2':
+		reduce_normal()
+	elif i == '3':
+		print('极简备份...')
+		exit(0)
+	else:
+		exit(0)
+#}}}	
 #{{{main()	主函数
 def main():
 	"""主函数，调度其他函数或变量完成程序功能"""	
@@ -163,12 +189,14 @@ def main():
 		cmd='tar cjvf '+cur_dir+dststr[3]+' '+emstr+' '
 	elif i == '5':				#游戏配置；参数为6
 		check_exist(6)
-		print('配置检测完成，开始备份....')
-		os.system('echo 配置检测完成，开始备份.... >> '+dfile)
-		cmd='tar cjvf '+cur_dir+dststr[5]+' '
-		for j in fin_str:
-			cmd+=j+' '
-			os.system('echo '+j+' >> '+dfile)
+#		print('配置检测完成，开始备份....')
+		sub_main()
+		exit(0)
+#		os.system('echo 配置检测完成，开始备份.... >> '+dfile)
+#		cmd='tar cjvf '+cur_dir+dststr[5]+' '
+#		for j in fin_str:
+#			cmd+=j+' '
+#			os.system('echo '+j+' >> '+dfile)
 	elif i == '6':				#游戏程序备份；参数为5
 		check_exist(5)
 		print('配置检测完成，开始备份....')

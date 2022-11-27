@@ -15,7 +15,8 @@
 .config/PCSX2/sstates/
 <4>.config/ppsspp
 .config/ppsspp/PSP/PPSSPP_STATE/
-
+<5>.local/share/citra
+.local/share/citra-emu/states/
 
 
 
