@@ -9,11 +9,28 @@ import time
 import subprocess
 #{{{配置文件的备份：定义一些固定需要备份的目录或文件
 #1、用户目录下配置的备份
-istr=['.vimrc','.vim/','.gitconfig','.bashrc','.bochsrc','.fluxbox/','.local/share/zathura/','.local/share/applications/','.config/conky/']
+istr=[
+'.vimrc',
+'.vim/',
+'.gitconfig',
+'.bashrc',
+'.bochsrc',
+'.fluxbox/',
+'.local/share/zathura/',
+'.local/share/applications/',
+'.config/conky/'
+]
 #2、/etc目录下的备份
-estr=['apt/sources.list','apt/preferences.d/']
+estr=[
+'apt/sources.list',
+'apt/preferences.d/'
+]
 #3、/usr目录下
-ustr=['local/bin/','share/fonts/truetype/winfonts/','local/v2ray/']
+ustr=[
+'local/bin/',
+'share/fonts/truetype/winfonts/',
+'local/v2ray/'
+]
 #个人网站的素材文件备份，依赖于/var/www/.gitignore,也就是没有纳入git管理的全部资料都在这里进行备份
 wws='/var/www/.gitignore'
 #数据库的备份
@@ -21,12 +38,77 @@ dstr=['ty001','env2016','env2017','env2018','gis_hb','web_data','gis_hb2018','gi
 #邮件备份，备份的邮箱为：tyyyyt@163.com,tybitsfox@126.com,tybitsfox@21cn.com;使用的邮件客户端为thunderbird
 emstr='/home/tian/.thunderbird/'
 #游戏配置及部分模拟器的备份：epsxe,pcsx2,retroarch,mednafen,citra,yuzu,ryujinx,wine,dosbox
-gappstr=['Ryujinx/','citra-linux-20221119-bccef5e/','ppsspp/','epsxe32/','retroarch/','yuzu/','duckstation/','citra-linux-20220702-546a8da/','epsxe/']
-ginistr=['.config/citra-emu/','.config/ppsspp/','.config/PCSX2/','.config/retroarch/','.config/Ryujinx/','.config/yuzu/','.epsxe/','.local/share/duckstation/','.local/share/ePSXe/','.local/share/citra-emu/','.local/share/yuzu/','.wine/','.zsnes/']
+gappstr=[
+'Ryujinx/',
+'citra-linux-20221119-bccef5e/',
+'ppsspp/',
+'epsxe32/',
+'retroarch/',
+'yuzu/',
+'duckstation/',
+'citra-linux-20220702-546a8da/',
+'epsxe/'
+]
+ginistr=[
+'.config/citra-emu/',
+'.config/ppsspp/',
+'.config/PCSX2/',
+'.config/retroarch/',
+'.config/Ryujinx/',
+'.config/yuzu/',
+'.epsxe/',
+'.mednafen/',
+'.local/share/duckstation/',
+'.local/share/ePSXe/',
+'.local/share/citra-emu/',
+'.local/share/yuzu/',
+'.wine/',
+'.zsnes/'
+]
+gmininistr=[
+'.epsxe/bios/',
+'.epsxe/memcards/',
+'.epsxe/epsxerc',
+'.mednafen/sav/',
+'.mednafen/mednafen.cfg',
+'.config/PCSX2/inis/',
+'.config/PCSX2/memcards',
+'.config/PCSX2/bios',
+'.config/ppsspp/PSP/SYSTEM/',
+'.config/ppsspp/PSP/SAVEDATA/',
+'.config/Ryujinx/system/',
+'.config/Ryujinx/bis/',
+'.config/retroarch/system/',
+'.config/retroarch/retroarch.cfg',
+'.local/share/yuzu/keys/',
+'.local/share/yuzu/sdmc/Nintendo/Contents/registered',
+'.local/share/citra-emu/sysdata/',
+'.local/share/citra-emu/sdmc/',
+]
 #游戏配置的精简函数，下列目录将被精简
-gdelstr=['.config/Ryujinx/games/','.config/retroarch/cheats/','.config/retroarch/downloads/','.config/retroarch/logs/','.config/retroarch/database/','.config/retroarch/shaders/','.config/PCSX2/sstates/','.config/ppsspp/PSP/PPSSPP_STATE/','.local/share/citra-emu/states/']
+gdelstr=[
+'.config/Ryujinx/games/',
+#'.config/retroarch/cheats/',
+'.config/retroarch/downloads/',
+#'.config/retroarch/logs/',
+#'.config/retroarch/database/',
+#'.config/retroarch/shaders/',
+'.config/retroarch/states/',
+'.config/PCSX2/sstates/',
+'.config/ppsspp/PSP/PPSSPP_STATE/',
+'.local/share/citra-emu/states/'
+]
 #生成的压缩备份文件
-dststr=['sysini.tar.bz2','webpic.tar.bz2','mysqlbak.tar.bz2','email.tar.bz2','game.tar.bz2','gameini.tar.bz2','']
+dststr=[
+'sysini.tar.bz2',
+'webpic.tar.bz2',
+'mysqlbak.tar.bz2',
+'email.tar.bz2',
+'game.tar.bz2',
+'full_gameini.tar.bz2',
+'normal_gameini.tar.bz2',
+'min_gameini.tar.bz2'
+]
 #}}}
 fin_str=[]	#用于保存检测并存在的文件目录，全路径
 cur_dir=''
@@ -123,20 +205,31 @@ def	reduce_normal():
 #			subprocess.run('rm -rf '+j,shell=True,stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL)
 			print(i.ljust(80)+'已清空')
 #}}}
-#{{{sub_main()	二级选择，模拟器配置备份：完全备份，精简备份，极简备份
-def sub_main():
+#{{{sub_main(v)	二级选择，模拟器配置备份：完全备份，精简备份，极简备份
+def sub_main(v):
 	print('模拟器配置检测完成！备份有三种方式：1、完全备份\t2、精简备份\t3、极简备份')
 	print('\033[31;5m 注意：精简备份会删除现有配置中的某些文件，完全备份和极简备份不会删除任何文件\033[0m')
 	i=input('\n请选择：')
 	if i == '1':
-		print('完全备份...')
-		exit(0)
+		print('开始完全备份...')
+		os.system('echo "开始完全备份" >> '+v)
+		return dststr[5]
 	elif i == '2':
 		reduce_normal()
+		print('开始精简备份...')
+		os.system('echo "开始精简备份" >> '+v)
+		return dststr[6]
 	elif i == '3':
-		print('极简备份...')
-		exit(0)
+		print('开始极简备份...')
+		os.system('echo "开始极简备份" >> '+v)
+		fin_str.clear()
+		for i in gmininistr:
+			j='/home/tian/'+i
+			if os.access(j,0):
+				fin_str.append(j)
+		return dststr[7]
 	else:
+		print('输入错误，备份终止')
 		exit(0)
 #}}}	
 #{{{main()	主函数
@@ -189,14 +282,11 @@ def main():
 		cmd='tar cjvf '+cur_dir+dststr[3]+' '+emstr+' '
 	elif i == '5':				#游戏配置；参数为6
 		check_exist(6)
-#		print('配置检测完成，开始备份....')
-		sub_main()
-		exit(0)
-#		os.system('echo 配置检测完成，开始备份.... >> '+dfile)
-#		cmd='tar cjvf '+cur_dir+dststr[5]+' '
-#		for j in fin_str:
-#			cmd+=j+' '
-#			os.system('echo '+j+' >> '+dfile)
+		y1=sub_main(dfile)
+		cmd='tar cjvf '+cur_dir+y1+' '
+		for j in fin_str:
+			cmd+=j+' '
+			os.system('echo '+j+' >> '+dfile)
 	elif i == '6':				#游戏程序备份；参数为5
 		check_exist(5)
 		print('配置检测完成，开始备份....')
@@ -209,6 +299,7 @@ def main():
 		print('选择错误，备份终止')
 		exit(0)
 	cmd+=dfile[1:]
+#	print(cmd)
 	subprocess.run(cmd,shell=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 	print('备份完成～～～～～')
 #}}}
